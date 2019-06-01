@@ -1,3 +1,4 @@
+import { Column } from './Column';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -9,14 +10,14 @@ export class FileUtil {
 
   getHeaderArray(csvRecordsArr, tokenDelimeter) {
     const headers = csvRecordsArr[0].split(tokenDelimeter);
-    const headerArray = [];
+    const headerArray: Column[] = [];
     for (let j = 0; j < headers.length; j++) {
-        headerArray.push(headers[j]);
+        headerArray.push(new Column(headers[j], false));
     }
     return headerArray;
   }
 
-  getDataRecordsArrayFromCSVFile(csvRecordsArray, headerArray, tokenDelimeter) {
+  getDataRecordsArrayFromCSVFile(csvRecordsArray, headerArray: Column[], tokenDelimeter) {
     const dataArr = [];
 
     for (let i = 1; i < csvRecordsArray.length; i++) {
@@ -25,10 +26,12 @@ export class FileUtil {
         const col = [];
         for (let j = 0; j < data.length; j++) {
           const header = headerArray[j];
-          col[header] = data[j];
+          col[header.value] = data[j];
         }
         dataArr.push(col);
     }
+
+    console.log(dataArr);
 
     return dataArr;
   }

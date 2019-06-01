@@ -1,3 +1,4 @@
+import { Column } from './shared/Column';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { FileUtil } from './shared/FileUtil';
@@ -8,7 +9,8 @@ import { FileUtil } from './shared/FileUtil';
   styles: []
 })
 export class AppComponent {
-  displayedColumns: string[] = [];
+  displayedColumns: Column[] = [];
+  columnDefinitions: String[] = [];
   dataSource = new MatTableDataSource<object>();
 
   @ViewChild(MatSort) sort: MatSort;
@@ -30,6 +32,8 @@ export class AppComponent {
       const csvRecordsArray = csvData.split(/\r\n|\n/);
 
       this.displayedColumns = this.fileUtil.getHeaderArray(csvRecordsArray, ',');
+      this.displayedColumns.forEach(column => { this.columnDefinitions.push(column.value); });
+      console.log(this.displayedColumns);
       this.dataSource = new MatTableDataSource(this.fileUtil.getDataRecordsArrayFromCSVFile(csvRecordsArray, this.displayedColumns, ','));
 
       this.dataSource.paginator = this.paginator;
